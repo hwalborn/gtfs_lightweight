@@ -3,7 +3,6 @@ require 'google/transit/gtfs-realtime.pb'
 require 'net/http'
 require 'uri'
 require 'ws2801'
-require 'concurrent'
 
 require_relative '../env/api_key.rb'
 
