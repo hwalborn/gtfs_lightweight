@@ -59,7 +59,7 @@ class CountdownList
           countdown_time = (arrival_time - Time.now.to_f) / 60
 
           # we don't care about times that have passed or
-          # times that are more than 15 minutes away
+          # times that are more than 20 minutes away
           if(countdown_time > 0 && countdown_time <= 20)
             # insert into sorted array depending on which direction
             # this train is traveling
@@ -76,21 +76,6 @@ class CountdownList
     end
   end
 
-  def update_time sleep_seconds, index, is_north_bound
-    task = Concurrent::ScheduledTask.new(sleep_seconds){
-      departure_list = current_departure_list(is_north_bound)
-      new_time = departure_list[index].floor
-      departure_list.delete_at(index)
-      departure_list.insert(index, floor)
-      if is_north_bound
-        @upcoming_departures[:departure_list_north] = departure_list
-      else
-        @upcoming_departures[:departure_list_south] = departure_list
-      end
-      puts json: @upcoming_departures
-    }.execute
-  end
-
   def get_seconds_remaining time
     time.modulo(1) * 60
   end
@@ -104,13 +89,9 @@ class CountdownList
     insert_index = get_insert_index(countdown_arry, countdown_time);
     # if countdown_time is the largest value for the array...
     if insert_index == nil
-      # TODO: figure out how to do this asynchronously
-      update_time(seconds_remaining, countdown_arry.length, is_north_bound)
       countdown_arry.push(countdown_time)
     else
       # otherwise, insert it at the index we found
-      # TODO: figure out how to do this asynchronously
-      update_time(seconds_remaining, insert_index, is_north_bound)
       countdown_arry.insert(insert_index, countdown_time)
     end
   end
