@@ -1,5 +1,5 @@
 require 'byebug'
-require_relative 'models/countdown_service'
+
 require_relative 'models/countdown_list'
 
 loop do
