@@ -4,6 +4,14 @@
 * cd into the directory
 * `ruby server_control.rb run`
 
+## ADDING THE API KEY
+For security reasons, I have placed my API Key in an environment variable and included it in the git ignore. You'll need to add your own api_key.rb file under the env directory and place the following code into it
+```ruby
+module ApiKey
+  KEY = 'YOUR API KEY'
+end
+```
+
 ## GEMS THIS PROGRAM USES:
 * 'gtfs-realtime'
 * 'rpi_gpio'
