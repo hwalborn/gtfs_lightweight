@@ -1,5 +1,7 @@
 require 'rpi_gpio'
 
+require_relative '../env/color_times.rb'
+
 class RpiService
   attr_accessor :countdown_list_model,
                 :light_pins,
@@ -7,13 +9,6 @@ class RpiService
   def initialize(countdown_list_model)
     @countdown_list_model = countdown_list_model
     # these are the pins for north and south, the first
-    # element in the array is for north, the second is south
-    @pin_colors = {
-      red: [20, 26],
-      yellow: [16, 13],
-      green: [12, 6],
-      blue: [23, 22]
-    }
     # need a list of all pins so that we can easily clear all
     @light_pins = {
       north_blue: 23,
@@ -24,6 +19,13 @@ class RpiService
       south_green: 6,
       south_yellow: 13,
       south_red: 26,
+    }
+    # element in the array is for north, the second is south
+    @pin_colors = {
+      red: [@light_pins[:north_red], @light_pins[:south_red]],
+      yellow: [@light_pins[:north_yellow], @light_pins[:south_yello]],
+      green: [@light_pins[:north_greeb], @light_pins[:south_green]],
+      blue: [@light_pins[:north_blue], @light_pins[:south_blue]]
     }
     # these are rpi_gpio settings that need to be set
     RPi::GPIO.set_numbering :bcm
@@ -46,19 +48,23 @@ class RpiService
   def find_and_light_pin departure_list, is_north_bound
     case departure_list
     # any time that is between 20 and 30 minutes away gets a blue color
-    when departure_list.any? { |dept|  dept <= 30 && dept > 20}
+  when departure_list.any? { |dept|  dept <= ColorTimes::BLUEMAX &&
+                                     dept > ColorTimes::BLUEMIN }
       light_pin(@pin_colors[:blue], is_north_bound)
     end
     # any time that is between 10 and 20 minutes away gets a green color
-    when departure_list.any? { |dept|  dept <= 20 && dept > 10}
+  when departure_list.any? { |dept|  dept <= ColorTimes::BLUEMIN &&
+                                     dept > ColorTimes::GREENMIN }
       light_pin(@pin_colors[:green], is_north_bound)
     end
     # any time that is between 7 and 10 minutes away gets a yellow color
-    when departure_list.any? { |dept|  dept <= 10 && dept > 7}
+  when departure_list.any? { |dept|  dept <= ColorTimes::GREENMIN &&
+                                     dept > ColorTimes::YELLOWMIN }
       light_pin(@pin_colors[:yellow], is_north_bound)
     end
     # any time that is between 5 and 7 minutes away will get a red color
-    when departure_list.any? { |dept|  dept <= 7 && dept >= 5}
+  when departure_list.any? { |dept|  dept <= ColorTimes::YELLOWMIN &&
+                                     dept >= ColorTimes::REDMIN }
       light_pin(@pin_colors[:red], is_north_bound)
     end
   end
