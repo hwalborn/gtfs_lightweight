@@ -24,7 +24,7 @@ class RpiService
     @pin_colors = {
       red: [@light_pins[:north_red], @light_pins[:south_red]],
       yellow: [@light_pins[:north_yellow], @light_pins[:south_yellow]],
-      green: [@light_pins[:north_greens], @light_pins[:south_green]],
+      green: [@light_pins[:north_green], @light_pins[:south_green]],
       blue: [@light_pins[:north_blue], @light_pins[:south_blue]]
     }
     # these are rpi_gpio settings that need to be set
