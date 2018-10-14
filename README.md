@@ -7,8 +7,17 @@
 
 ## GEMS THIS PROGRAM USES:
 * 'gtfs-realtime'
-* 'ws2801'
+* 'rpi_gpio'
 * 'concurrent'
+
+## NOTES:
+* This program will only run on a Linux machine... the rpi_gpio gem
+requires an ubuntu OS
+* Light colors mean the following:
+  * Blue: the train is between 20 and 30 minutes away
+  * Green: the train is between 10 and 20 minutes away
+  * Yellow: the train is between 7 and 10 minutes away
+  * Red: the train is between 5 and 7 minutes away
 
 ## THINGS COMING IN THE FUTURE:
 * Raspberry Pi capabilities

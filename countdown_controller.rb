@@ -1,10 +1,10 @@
 require 'byebug'
 
 require_relative 'models/countdown_list'
+require_relative 'models/rpi_service'
 
 loop do
   countdown_list = CountdownList.new()
-  puts json: countdown_list.upcoming_departures
-  puts countdown_list.next_refresh
+  rpi_service = RpiService.new(countdown_list)
   sleep(countdown_list.next_refresh)
 end

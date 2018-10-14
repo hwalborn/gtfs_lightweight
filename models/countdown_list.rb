@@ -2,28 +2,20 @@ require 'protobuf'
 require 'google/transit/gtfs-realtime.pb'
 require 'net/http'
 require 'uri'
-require 'ws2801'
 
 require_relative '../env/api_key.rb'
+require_relative '../env/feed_id.rb'
+require_relative '../env/stop.rb'
 
 class CountdownList
   attr_accessor :upcoming_departures,
                 :feed_list,
                 :next_refresh
   def initialize
-    # TODO: THIS COULD BE A GOOD EXTERNAL LIBRARY TO USE
-    # WS2801.generate                # generate empty strip (Would happen from alone if you just start setting colors)
-    #
-    # WS2801.length 25               # default
-    # WS2801.device "/dev/spidev0.0" # default
-    # WS2801.autowrite true
-    #
-    # WS2801.set :pixel => :all, :r => 255 # set all to red
-
     # grab our data from gtfs
     data = Net::HTTP
            .get(URI
-           .parse("http://datamine.mta.info/mta_esi.php?key=#{ApiKey::KEY}&feed_id=31"))
+           .parse("http://datamine.mta.info/mta_esi.php?key=#{ApiKey::KEY}&feed_id=#{FeedId::ID}"))
     # use the gtfs-realtime-bindings gem to decode it to a feed list
     @feed_list = Transit_realtime::FeedMessage.decode(data).entity
     # make a hash with empty arrays to keep track of our departures
@@ -47,7 +39,7 @@ class CountdownList
         departures = entity[:trip_update][:stop_time_update]
         .select do |stop|
           # looking just for the GreenPoint Ave (stop_id = G26) stops...
-          stop[:stop_id].include? "G26"
+          stop[:stop_id].include? Stop::ID
         end
         .map do |stop|
           # get the arrival time from the gtfs data
@@ -58,8 +50,8 @@ class CountdownList
           countdown_time = (arrival_time - Time.now.to_f) / 60
 
           # we don't care about times that have passed or
-          # times that are more than 20 minutes away
-          if(countdown_time > 0 && countdown_time <= 20)
+          # times that are more than 30 minutes away
+          if(countdown_time > 0 && countdown_time <= 30)
             # insert into sorted array depending on which direction
             # this train is traveling
             if stop[:stop_id].include? 'N'
