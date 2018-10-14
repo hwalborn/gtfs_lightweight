@@ -8,7 +8,6 @@ class RpiService
                 :pin_colors
   def initialize(countdown_list_model)
     @countdown_list_model = countdown_list_model
-    # these are the pins for north and south, the first
     # need a list of all pins so that we can easily clear all
     @light_pins = {
       north_blue: 23,
@@ -20,6 +19,7 @@ class RpiService
       south_yellow: 13,
       south_red: 26,
     }
+    # these are the pins for north and south, the first
     # element in the array is for north, the second is south
     @pin_colors = {
       red: [@light_pins[:north_red], @light_pins[:south_red]],
