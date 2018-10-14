@@ -47,22 +47,22 @@ class RpiService
 
   def find_and_light_pin departure_list, is_north_bound
     # any time that is between 20 and 30 minutes away gets a blue color
-  if(departure_list.any? { |dept|  dept <= ColorTimes::BLUEMAX &&
+    if(departure_list.any? { |dept|  dept <= ColorTimes::BLUEMAX &&
                                      dept > ColorTimes::BLUEMIN })
       light_pin(@pin_colors[:blue], is_north_bound)
     end
     # any time that is between 10 and 20 minutes away gets a green color
-  if(departure_list.any? { |dept|  dept <= ColorTimes::BLUEMIN &&
+    if(departure_list.any? { |dept|  dept <= ColorTimes::BLUEMIN &&
                                      dept > ColorTimes::GREENMIN })
       light_pin(@pin_colors[:green], is_north_bound)
     end
     # any time that is between 7 and 10 minutes away gets a yellow color
-  if(departure_list.any? { |dept|  dept <= ColorTimes::GREENMIN &&
+    if(departure_list.any? { |dept|  dept <= ColorTimes::GREENMIN &&
                                      dept > ColorTimes::YELLOWMIN })
       light_pin(@pin_colors[:yellow], is_north_bound)
     end
     # any time that is between 5 and 7 minutes away will get a red color
-  if(departure_list.any? { |dept|  dept <= ColorTimes::YELLOWMIN &&
+    if(departure_list.any? { |dept|  dept <= ColorTimes::YELLOWMIN &&
                                      dept >= ColorTimes::REDMIN })
       light_pin(@pin_colors[:red], is_north_bound)
     end
