@@ -15,7 +15,6 @@ end
 ## GEMS THIS PROGRAM USES:
 * 'gtfs-realtime'
 * 'rpi_gpio'
-* 'concurrent'
 * 'daemons'
 
 ## NOTES:
